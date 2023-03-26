@@ -10,7 +10,9 @@ sed -i "s?{NITROX_PORT}?$NITROX_PORT?g" static/config/environment.json
 sed -i "s?{NITROX_ENVIRONMENT}?$NITROX_ENVIRONMENT?g" static/config/environment.json
 sed -i "s?{NITROX_PROXY}?$NITROX_PROXY?g" static/config/environment.json
 
-cp static/config/environment.json .svelte-kit/output/client/config/environment.json
+if [ -d ".svelte-kit/output/client/config" ]; then
+  cp static/config/environment.json .svelte-kit/output/client/config/environment.json
+fi
 
 if [ $NITROX_ENVIRONMENT = 'development' ]; then
   npx vite dev --port $NITROX_PORT --host $NITROX_HOST --mode development

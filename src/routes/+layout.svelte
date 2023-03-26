@@ -71,32 +71,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');
-
-    /*      background-image: url('https://images.unsplash.com/Ys-DBJeX0nE.JPG?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');*/
-    /*      background-image: url('https://images.unsplash.com/photo-1548919973-5cef591cdbc9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');*/
-    /*      background-image: url('https://images.unsplash.com/photo-1619796404374-aff912b43cd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2456&q=80');*/
-
-    /*      background-image: url('https://images.unsplash.com/photo-1575365717666-1a84be3fd104?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');*/
-
-    /*      background-image: url('https://images.unsplash.com/photo-1557515126-1bf9ada5cb93?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2531&q=80');*/
-    /*      background-image: url('https://images.unsplash.com/photo-1581373449483-37449f962b6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8oky1j.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/6o/wallhaven-6oqzgq.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/6k/wallhaven-6k2ogx.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/wy/wallhaven-wy1lyr.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/6k/wallhaven-6k8kkx.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/ox/wallhaven-oxlprl.jpg');*/
-    /*      background-image: url('https://w.wallhaven.cc/full/r2/wallhaven-r2opq1.jpg');*/
-    /*      background-image: url('https://images.unsplash.com/photo-1535391879778-3bae11d29a24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');*/
-    /*      background-image: url('https://images.unsplash.com/photo-1534076355207-1717511180ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80');*/
+    background-image: url('images/photo-1519608487953-e999c86e7455.avif');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     opacity: 0.15;
     filter: blur(5px);
-    /*    opacity: 0.10;*/
-    /*    filter: blur(15px);*/
     z-index: -1;
   }
 

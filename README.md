@@ -8,8 +8,10 @@ Check the [Nitrox documentation](https://icebaker.github.io/nitrox) for more inf
 
 ```bash
 npm install
-npm run dev
-npm run dev -- --open
+
+cp .env.example .env
+
+./init.sh
 ```
 
 ## Build
