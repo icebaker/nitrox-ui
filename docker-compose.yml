@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  nitrox:
+    image: localhost:5000/nitrox-ui
+    environment:
+      NITROX_PROXY: localhost:3500
+      NITROX_SERVICE: nitrox/ui
+      NITROX_ENVIRONMENT: production
+      NITROX_HOST: 0.0.0.0
+      NITROX_PORT: 3700
+    volumes:
+      - ./data:/nitrox/app/service/nitrox-ui/data
+    ports:
+      - 3700:3700
