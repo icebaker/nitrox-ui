@@ -49,6 +49,7 @@
 
   let baseUrl = undefined;
   let requestUrl = undefined;
+  let shortRequestUrl = undefined;
 
   const loadData = async (kind) => {
     if (kind === 'post') {
@@ -80,6 +81,8 @@
       'Content-Type': 'application/json',
       'Nitrox-Connection-Id': Cookies.get('connection')
     };
+
+    shortRequestUrl = requestUrl;
 
     if (requestUrl.includes('?')) {
       requestUrl = `${requestUrl}&connection_id=${Cookies.get('connection')}`;
@@ -317,7 +320,7 @@
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {requestUrl}
+                  {shortRequestUrl}
                 </a>
               {/if}
             </div>

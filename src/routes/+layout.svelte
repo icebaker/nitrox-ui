@@ -71,7 +71,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('images/photo-1519608487953-e999c86e7455.avif');
+    background-image: url('/images/photo-1519608487953-e999c86e7455.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
