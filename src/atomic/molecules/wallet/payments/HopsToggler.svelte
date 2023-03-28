@@ -18,7 +18,7 @@
       <Hops {payment} purpose={payment.purpose} />
     </div>
   {/if}
-</td><td>
+</td><td width="1">
   <button on:click={toggleState} type="button" class="btn btn-outline-secondary btn-sm">
     {#if state === 'closed'}
       <i class="bi bi-chevron-bar-down" />

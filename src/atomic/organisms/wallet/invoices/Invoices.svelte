@@ -1,4 +1,7 @@
 <script>
+  import FleetingDetails from '../../../molecules/fleeting/Details.svelte';
+  import FleetingRow from '../../../molecules/fleeting/Row.svelte';
+
   import NumberAtom from '../../../atoms/Number.svelte';
   import PayableAtom from '../../../atoms/invoice/Payable.svelte';
   import StateAtom from '../../../atoms/invoice/State.svelte';
@@ -17,6 +20,14 @@
 
   const openInvoice = (invoice) => {
     if (invoiceModal) invoiceModal.open(invoice);
+  };
+
+  let fleetingModal = undefined;
+  let modalTitle = null;
+
+  const openFleeting = (fleeting, kind) => {
+    modalTitle = kind === 'error' ? 'Error Details' : 'Pending Details';
+    if (fleetingModal) fleetingModal.open(fleeting);
   };
 </script>
 
@@ -44,48 +55,52 @@
     </thead>
     <tbody>
       {#each data.items as invoice (`invoice-${invoice._key}`)}
-        <tr>
-          <td valign="middle"><TimeAtom at={invoice.created_at} /></td>
-          <td valign="middle"><TimeAtom at={invoice.expires_at} expirable={true} /></td>
-          <td valign="middle">
-            {#if invoice.description.memo}
-              {invoice.description.memo}
-            {:else}
-              -
-            {/if}
-          </td>
-          <td valign="middle">
-            {#if invoice.amount}
-              <MilliSatsAtom milli={invoice.amount.millisatoshis} />
-            {:else}
-              -
-            {/if}
-          </td>
-          <td valign="middle">
-            {#if invoice.received}
-              {#if invoice.payable !== 'once' && invoice.payments && invoice.payments.length > 0}
-                <MilliSatsAtom milli={invoice.received.millisatoshis} />
-                ({invoice.payments.length})
+        {#if invoice._fleeting}
+          <FleetingRow fleeting={invoice} opener={openFleeting} colspan="7" />
+        {:else}
+          <tr>
+            <td valign="middle"><TimeAtom at={invoice.created_at} /></td>
+            <td valign="middle"><TimeAtom at={invoice.expires_at} expirable={true} /></td>
+            <td valign="middle">
+              {#if invoice.description.memo}
+                {invoice.description.memo}
               {:else}
-                <MilliSatsAtom milli={invoice.received.millisatoshis} />
+                -
               {/if}
-            {:else}
-              -
-            {/if}
-          </td>
-          <td valign="middle"><PayableAtom payable={invoice.payable} /></td>
-          <td valign="middle"><StateAtom state={invoice.state} /></td>
-          <td valign="middle"><ShortenerAtom hash={invoice.code} limit={30} /></td>
-          <td valign="middle" class="text-center">
-            <button
-              on:click={openInvoice(invoice)}
-              type="button"
-              class="btn btn-outline-secondary btn-sm"
-            >
-              <i class="bi bi-qr-code-scan" />
-            </button>
-          </td>
-        </tr>
+            </td>
+            <td valign="middle">
+              {#if invoice.amount}
+                <MilliSatsAtom milli={invoice.amount.millisatoshis} />
+              {:else}
+                -
+              {/if}
+            </td>
+            <td valign="middle">
+              {#if invoice.received}
+                {#if invoice.payable !== 'once' && invoice.payments && invoice.payments.length > 0}
+                  <MilliSatsAtom milli={invoice.received.millisatoshis} />
+                  ({invoice.payments.length})
+                {:else}
+                  <MilliSatsAtom milli={invoice.received.millisatoshis} />
+                {/if}
+              {:else}
+                -
+              {/if}
+            </td>
+            <td valign="middle"><PayableAtom payable={invoice.payable} /></td>
+            <td valign="middle"><StateAtom state={invoice.state} /></td>
+            <td valign="middle"><ShortenerAtom hash={invoice.code} limit={30} /></td>
+            <td valign="middle" class="text-center">
+              <button
+                on:click={openInvoice(invoice)}
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+              >
+                <i class="bi bi-qr-code-scan" />
+              </button>
+            </td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>
@@ -94,5 +109,11 @@
 <Modal title="Invoice" size="lg" bind:this={invoiceModal} let:data>
   {#if data !== undefined}
     <Invoice invoice={data} />
+  {/if}
+</Modal>
+
+<Modal title={modalTitle} size="lg" bind:this={fleetingModal} let:data>
+  {#if data !== undefined}
+    <FleetingDetails fleeting={data} />
   {/if}
 </Modal>

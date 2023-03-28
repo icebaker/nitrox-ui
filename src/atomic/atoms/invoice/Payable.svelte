@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   export let payable;
+  export let label = false;
 
   let iconElement;
 
@@ -10,17 +11,19 @@
   });
 
   let cssClass = undefined;
-  let label = undefined;
+  let labelText = undefined;
 
-  switch (payable) {
-    case 'indefinitely':
-      label = 'indefinitely';
-      cssClass = 'bi-infinity text-warning';
-      break;
-    case 'once':
-      label = 'once';
-      cssClass = 'bi-1-square text-info';
-      break;
+  $: {
+    switch (payable) {
+      case 'indefinitely':
+        labelText = 'Indefinitely';
+        cssClass = 'bi-infinity text-warning';
+        break;
+      case 'once':
+        labelText = 'Once';
+        cssClass = 'bi-1-square text-info';
+        break;
+    }
   }
 </script>
 
@@ -32,7 +35,8 @@
       bind:this={iconElement}
       class={`bi ${cssClass}`}
       data-bs-toggle="tooltip"
-      data-bs-title={label}
+      data-bs-title={labelText}
     />
+    {#if label}<span>&nbsp;{labelText}</span>{/if}
   {/if}
 </span>

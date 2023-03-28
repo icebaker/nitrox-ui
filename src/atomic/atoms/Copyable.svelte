@@ -2,27 +2,63 @@
   import { onMount } from 'svelte';
 
   export let content;
+  export let modalElement = undefined;
+  export let label = undefined;
+  export let caption = '';
+  export let cssClass = '';
 
-  let codeElement;
+  let element;
+  let copyState = 'waiting';
+
+  $: {
+    if (content) copyState = 'waiting';
+  }
 
   onMount(() => {
-    if (codeElement) {
-      new bootstrap.Tooltip(codeElement);
-      new ClipboardJS(codeElement);
+    if (element) {
+      new bootstrap.Tooltip(element);
+      let clipboard;
+
+      if (modalElement) {
+        clipboard = new ClipboardJS(element, { container: modalElement });
+      } else {
+        clipboard = new ClipboardJS(element);
+      }
+
+      clipboard.on('success', function () {
+        copyState = 'done';
+        setTimeout(() => {
+          copyState = 'waiting';
+        }, 1500);
+      });
     }
   });
 </script>
 
-<div class="input-group mb-3">
-  <input bind:value={content} type="text" class="form-control font-monospace" />
+<div class="input-group">
+  {#if label}
+    <span class="input-group-text">{label}</span>
+  {/if}
+  <input
+    type="text"
+    class={`form-control text-center ${cssClass}`}
+    aria-label={caption}
+    value={content}
+    readonly
+  />
   <button
-    bind:this={codeElement}
-    data-clipboard-text={content}
+    bind:this={element}
     data-bs-toggle="tooltip"
     data-bs-title="copy to clipboard"
-    class="btn btn-outline-secondary"
+    aria-label={`copy ${caption} to clipboard`}
+    data-clipboard-text={content}
+    class={`btn ${copyState === 'waiting' ? 'btn-outline-secondary' : 'btn-success'}`}
     type="button"
   >
-    <i class="bi bi-clipboard" />
+    {#if copyState == 'waiting'}
+      <i class="bi bi-clipboard" />
+    {:else}
+      <i class="bi bi-check-circle-fill" />
+    {/if}
   </button>
 </div>

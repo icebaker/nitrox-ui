@@ -41,46 +41,46 @@
             </thead>
             <tbody>
               <tr>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
-                <td><PayableAtom payable="indefinitely" /> <span>Indefinitely</span></td>
-                <td><ThroughAtom through="amp" /> <span>AMP</span></td>
-                <td><AmountAtom amount="open" /> <span>Open</span></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
+                <td><PayableAtom payable="indefinitely" label={captions} /></td>
+                <td><ThroughAtom through="amp" label={captions} /></td>
+                <td><AmountAtom amount="open" label={captions} /></td>
               </tr>
               <tr>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
-                <td><PayableAtom payable="indefinitely" /> <span>Indefinitely</span></td>
-                <td><ThroughAtom through="keysend" /> <span>Keysend</span></td>
-                <td><AmountAtom amount="open" /> <span>Open</span></td>
-              </tr>
-              <tr>
-                <td colspan="4">&nbsp;</td>
-              </tr>
-              <tr>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
-                <td><PayableAtom payable="once" /> <span>Once</span></td>
-                <td><ThroughAtom through="non-amp" /> <span>Non-AMP</span></td>
-                <td><AmountAtom amount="fixed" /> <span>Fixed</span></td>
-              </tr>
-              <tr>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
-                <td><PayableAtom payable="once" /> <span>Once</span></td>
-                <td><ThroughAtom through="non-amp" /> <span>Non-AMP</span></td>
-                <td><AmountAtom amount="open" /> <span>Open</span></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
+                <td><PayableAtom payable="indefinitely" label={captions} /></td>
+                <td><ThroughAtom through="keysend" label={captions} /></td>
+                <td><AmountAtom amount="open" label={captions} /></td>
               </tr>
               <tr>
                 <td colspan="4">&nbsp;</td>
               </tr>
               <tr>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
-                <td><PayableAtom payable="indefinitely" /> <span>Indefinitely</span></td>
-                <td><ThroughAtom through="amp" /> <span>AMP</span></td>
-                <td><AmountAtom amount="fixed" /> <span>Fixed</span></td>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
+                <td><PayableAtom payable="once" label={captions} /></td>
+                <td><ThroughAtom through="non-amp" label={captions} /></td>
+                <td><AmountAtom amount="fixed" label={captions} /></td>
               </tr>
               <tr>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
-                <td><PayableAtom payable="indefinitely" /> <span>Indefinitely</span></td>
-                <td><ThroughAtom through="amp" /> <span>AMP</span></td>
-                <td><AmountAtom amount="open" /> <span>Open</span></td>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
+                <td><PayableAtom payable="once" label={captions} /></td>
+                <td><ThroughAtom through="non-amp" label={captions} /></td>
+                <td><AmountAtom amount="open" label={captions} /></td>
+              </tr>
+              <tr>
+                <td colspan="4">&nbsp;</td>
+              </tr>
+              <tr>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
+                <td><PayableAtom payable="indefinitely" label={captions} /></td>
+                <td><ThroughAtom through="amp" label={captions} /></td>
+                <td><AmountAtom amount="fixed" label={captions} /></td>
+              </tr>
+              <tr>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
+                <td><PayableAtom payable="indefinitely" label={captions} /></td>
+                <td><ThroughAtom through="amp" label={captions} /></td>
+                <td><AmountAtom amount="open" label={captions} /></td>
               </tr>
             </tbody>
           </table>
@@ -105,12 +105,12 @@
           <table class="table table-hover">
             <tbody>
               <tr>
-                <td><PurposeAtom purpose="payment" /> <span>Payment</span></td>
-                <td><PurposeAtom purpose="peer-to-peer" /> <span>Peer-to-Peer</span></td>
+                <td><PurposeAtom purpose="payment" label={captions} /></td>
+                <td><PurposeAtom purpose="peer-to-peer" label={captions} /></td>
               </tr>
               <tr>
-                <td><PurposeAtom purpose="rebalance" /> <span>Rebalance</span></td>
-                <td><PurposeAtom purpose="self-payment" /> <span>Self-Payment</span></td>
+                <td><PurposeAtom purpose="rebalance" label={captions} /></td>
+                <td><PurposeAtom purpose="self-payment" label={captions} /></td>
               </tr>
             </tbody>
           </table>
@@ -143,68 +143,68 @@
             </thead>
             <tbody>
               <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="bitcoin" /> <span>Bitcoin</span></td>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="bitcoin" label={captions} /></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="bitcoin" /> <span>Bitcoin</span></td>
-                <td><HowAtom how="closing-channel" /> <span>Closing Channel</span></td>
-              </tr>
-              <tr>
-                <td colspan="3">&nbsp;</td>
-              </tr>
-              <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="opening-channel" /> <span>Opening Channel</span></td>
-              </tr>
-              <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
-              </tr>
-              <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
-              </tr>
-              <tr>
-                <td><DirectionAtom direction="in" /> <span>In</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="forwarding" /> <span>Forwarding</span></td>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="bitcoin" label={captions} /></td>
+                <td><HowAtom how="closing-channel" label={captions} /></td>
               </tr>
               <tr>
                 <td colspan="3">&nbsp;</td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="out" /> <span>Out</span></td>
-                <td><LayerAtom layer="bitcoin" /> <span>Bitcoin</span></td>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="opening-channel" label={captions} /></td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="out" /> <span>Out</span></td>
-                <td><LayerAtom layer="bitcoin" /> <span>Bitcoin</span></td>
-                <td><HowAtom how="opening-channel" /> <span>Opening Channel</span></td>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
+              </tr>
+              <tr>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
+              </tr>
+              <tr>
+                <td><DirectionAtom direction="in" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="forwarding" label={captions} /></td>
               </tr>
               <tr>
                 <td colspan="3">&nbsp;</td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="out" /> <span>Out</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="closing-channel" /> <span>Closing Channel</span></td>
+                <td><DirectionAtom direction="out" label={captions} /></td>
+                <td><LayerAtom layer="bitcoin" label={captions} /></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="out" /> <span>Out</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="spontaneously" /> <span>Spontaneously</span></td>
+                <td><DirectionAtom direction="out" label={captions} /></td>
+                <td><LayerAtom layer="bitcoin" label={captions} /></td>
+                <td><HowAtom how="opening-channel" label={captions} /></td>
               </tr>
               <tr>
-                <td><DirectionAtom direction="out" /> <span>Out</span></td>
-                <td><LayerAtom layer="lightning" /> <span>Lightning</span></td>
-                <td><HowAtom how="with-invoice" /> <span>With Invoice</span></td>
+                <td colspan="3">&nbsp;</td>
+              </tr>
+              <tr>
+                <td><DirectionAtom direction="out" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="closing-channel" label={captions} /></td>
+              </tr>
+              <tr>
+                <td><DirectionAtom direction="out" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="spontaneously" label={captions} /></td>
+              </tr>
+              <tr>
+                <td><DirectionAtom direction="out" label={captions} /></td>
+                <td><LayerAtom layer="lightning" label={captions} /></td>
+                <td><HowAtom how="with-invoice" label={captions} /></td>
               </tr>
             </tbody>
           </table>

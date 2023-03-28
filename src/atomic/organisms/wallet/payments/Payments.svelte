@@ -13,6 +13,7 @@
   import TimeAtom from '../../../atoms/Time.svelte';
   import ShortenerAtom from '../../../atoms/Shortener.svelte';
   import HopsToggler from '../../../molecules/wallet/payments/HopsToggler.svelte';
+  import PaymentProof from '../../../molecules/wallet/payments/PaymentProof.svelte';
 
   import Presenter from '../../../../helpers/presenter.js';
   import FilterableData from '../../../molecules/FilterableData.svelte';
@@ -20,9 +21,15 @@
   let fleetingModal = undefined;
   let modalTitle = null;
 
+  let proofModal = undefined;
+
   const openFleeting = (fleeting, kind) => {
     modalTitle = kind === 'error' ? 'Error Details' : 'Pending Details';
     if (fleetingModal) fleetingModal.open(fleeting);
+  };
+
+  const openProof = (payment) => {
+    if (proofModal) proofModal.open(payment);
   };
 </script>
 
@@ -44,8 +51,8 @@
         <th scope="col">Amount</th>
         <th scope="col">Fee</th>
         <th scope="col">PPM</th>
-        <th scope="col">Message</th>
         <th scope="col">Hops</th>
+        <th scope="col" />
         <th scope="col" />
       </tr>
     </thead>
@@ -64,14 +71,22 @@
             <td valign="middle"
               ><NumberAtom value={payment.fee.parts_per_million} round={true} /></td
             >
-            <td valign="middle">
-              {#if payment.message}
-                <ShortenerAtom hash={payment.message} limit={22} code={false} />
+            <HopsToggler {payment} />
+            <td width="1">
+              {#if payment.secret && payment.secret.proof}
+                <button
+                  on:click={openProof(payment)}
+                  type="button"
+                  class="btn btn-outline-success btn-sm"
+                >
+                  <i class="bi bi-key-fill" />
+                </button>
               {:else}
-                -
+                <button disabled type="button" class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-key-fill" />
+                </button>
               {/if}
             </td>
-            <HopsToggler {payment} />
           </tr>
         {/if}
       {/each}
@@ -82,5 +97,11 @@
 <Modal title={modalTitle} size="lg" bind:this={fleetingModal} let:data>
   {#if data !== undefined}
     <FleetingDetails fleeting={data} />
+  {/if}
+</Modal>
+
+<Modal title="Payment" size="lg" bind:this={proofModal} let:data let:modalElement>
+  {#if data !== undefined}
+    <PaymentProof payment={data} {modalElement} />
   {/if}
 </Modal>
