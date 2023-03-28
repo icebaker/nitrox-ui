@@ -69,8 +69,6 @@
       'Nitrox-Connection-Id': Cookies.get('connection')
     };
 
-    const body = { invoice: newPayment };
-
     const response = await fetch(`${baseUrl}/invoices/${newPayment.code}`, {
       method: 'GET',
       headers: headers

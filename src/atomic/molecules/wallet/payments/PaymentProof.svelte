@@ -56,11 +56,20 @@
       <th scope="col" class="text-end">Through</th>
       <td><ThroughAtom through={payment.through} label={true} /></td>
     </tr>
+    {#if payment.message}
+      <tr>
+        <th scope="col" class="text-end">Message</th>
+        <td colspan="3"><em>{payment.message}</em></td>
+      </tr>
+    {/if}
   </tbody>
 </table>
 
 {#if payment.how === 'with-invoice'}
   <div class="invoice">
+    {#if payment.invoice.description && payment.invoice.description.memo}
+      <p class="text-center fs-4 memo">{payment.invoice.description.memo}</p>
+    {/if}
     <Copyable
       label="Invoice Code"
       content={payment.invoice.code}
@@ -70,8 +79,9 @@
   </div>
 {/if}
 
-<p>
-  After completing a payment, the seller may ask for a "proof of payment" or "preimage." Here it is:
+<p class="text-center">
+  The recipient of your payment may request a <em>"proof of payment"</em> or <code>preimage</code>.
+  Here it is:
 </p>
 
 <div class="proof">
@@ -94,6 +104,12 @@
     padding: 1em;
   }
 
+  p.memo {
+    margin: 0 0 1em 0;
+    padding: 0 1em;
+    margin-top: -0.3em;
+  }
+
   .alert {
     margin: 0 1em 0.6em 1em;
   }
@@ -106,6 +122,6 @@
 
   .invoice {
     margin-top: 2em;
-    margin-bottom: 0.8em;
+    margin-bottom: 1em;
   }
 </style>

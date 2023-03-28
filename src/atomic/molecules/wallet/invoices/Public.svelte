@@ -1,6 +1,8 @@
 <script>
+  import AmountAtom from '../../../atoms/invoice/AmountKind.svelte';
   import ShortenerAtom from '../../../atoms/Shortener.svelte';
   import MilliSatsAtom from '../../../atoms/MilliSats.svelte';
+  import PayableAtom from '../../../atoms/invoice/Payable.svelte';
   import TimeAtom from '../../../atoms/Time.svelte';
 
   export let invoice;
@@ -8,6 +10,12 @@
 
 <table class="table text-center table-hover">
   <tbody>
+    <tr>
+      <th scope="col" class="text-end">Created</th>
+      <td valign="middle" class="text-start">
+        <TimeAtom at={invoice.created_at} />
+      </td>
+    </tr>
     <tr>
       <th scope="col" class="text-end">Description</th>
       <td valign="middle" class="text-start">
@@ -23,13 +31,20 @@
         <th scope="col" class="text-end">Millisatoshis</th>
         <td valign="middle" class="text-start">
           <MilliSatsAtom milli={invoice.amount.millisatoshis} as="millisatoshis" />
-        </td></tr
-      >
+        </td>
+      </tr>
+    {:else}
+      <tr>
+        <th scope="col" class="text-end">Amount</th>
+        <td valign="middle" class="text-start">
+          <AmountAtom amount="open" label={true} />
+        </td>
+      </tr>
     {/if}
     <tr>
       <th scope="col" class="text-end">Payable</th>
       <td valign="middle" class="text-start">
-        {invoice.payable}
+        <PayableAtom payable={invoice.payable} label={true} />
       </td>
     </tr>
     <tr>
@@ -37,10 +52,6 @@
       <td valign="middle" class="text-start">
         <TimeAtom at={invoice.expires_at} expirable={true} />
       </td>
-    </tr>
-    <tr>
-      <th scope="col" class="text-end">Code</th>
-      <td valign="middle" class="text-start"> <ShortenerAtom hash={invoice.code} limit={40} /></td>
     </tr>
     <slot />
   </tbody>

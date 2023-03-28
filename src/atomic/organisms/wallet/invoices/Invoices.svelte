@@ -2,6 +2,7 @@
   import FleetingDetails from '../../../molecules/fleeting/Details.svelte';
   import FleetingRow from '../../../molecules/fleeting/Row.svelte';
 
+  import AmountAtom from '../../../atoms/invoice/AmountKind.svelte';
   import NumberAtom from '../../../atoms/Number.svelte';
   import PayableAtom from '../../../atoms/invoice/Payable.svelte';
   import StateAtom from '../../../atoms/invoice/State.svelte';
@@ -15,11 +16,17 @@
   import FilterableData from '../../../molecules/FilterableData.svelte';
   import Modal from '../../../molecules/Modal.svelte';
   import Invoice from '../../../molecules/wallet/invoices/Invoice.svelte';
+  import ProofValidation from '../../../molecules/wallet/invoices/ProofValidation.svelte';
 
   let invoiceModal = undefined;
+  let proofValidationModal = undefined;
 
   const openInvoice = (invoice) => {
     if (invoiceModal) invoiceModal.open(invoice);
+  };
+
+  const openProofValidation = (invoice) => {
+    if (proofValidationModal) proofValidationModal.open(invoice);
   };
 
   let fleetingModal = undefined;
@@ -50,13 +57,14 @@
         <th scope="col">Payable</th>
         <th scope="col">State</th>
         <th scope="col">Code</th>
-        <th scope="col">QR Code</th>
+        <th scope="col" width="1" />
+        <th scope="col" width="1" />
       </tr>
     </thead>
     <tbody>
       {#each data.items as invoice (`invoice-${invoice._key}`)}
         {#if invoice._fleeting}
-          <FleetingRow fleeting={invoice} opener={openFleeting} colspan="7" />
+          <FleetingRow fleeting={invoice} opener={openFleeting} colspan="8" />
         {:else}
           <tr>
             <td valign="middle"><TimeAtom at={invoice.created_at} /></td>
@@ -72,7 +80,7 @@
               {#if invoice.amount}
                 <MilliSatsAtom milli={invoice.amount.millisatoshis} />
               {:else}
-                -
+                <AmountAtom amount="open" />
               {/if}
             </td>
             <td valign="middle">
@@ -99,6 +107,15 @@
                 <i class="bi bi-qr-code-scan" />
               </button>
             </td>
+            <td>
+              <button
+                on:click={openProofValidation(invoice)}
+                type="button"
+                class="btn btn-outline-info btn-sm"
+              >
+                <i class="bi bi-shield-lock-fill" />
+              </button>
+            </td>
           </tr>
         {/if}
       {/each}
@@ -106,9 +123,21 @@
   </table>
 </FilterableData>
 
-<Modal title="Invoice" size="lg" bind:this={invoiceModal} let:data>
+<Modal
+  title="Validate Proof of Payment"
+  size="lg"
+  bind:this={proofValidationModal}
+  let:data
+  let:modalElement
+>
   {#if data !== undefined}
-    <Invoice invoice={data} />
+    <ProofValidation invoice={data} {modalElement} />
+  {/if}
+</Modal>
+
+<Modal title="Invoice" size="lg" bind:this={invoiceModal} let:data let:modalElement>
+  {#if data !== undefined}
+    <Invoice invoice={data} {modalElement} />
   {/if}
 </Modal>
 

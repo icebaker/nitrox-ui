@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   export let content;
   export let modalElement = undefined;
@@ -14,10 +14,11 @@
     if (content) copyState = 'waiting';
   }
 
+  let clipboard;
+
   onMount(() => {
     if (element) {
       new bootstrap.Tooltip(element);
-      let clipboard;
 
       if (modalElement) {
         clipboard = new ClipboardJS(element, { container: modalElement });
@@ -32,6 +33,10 @@
         }, 1500);
       });
     }
+  });
+
+  onDestroy(() => {
+    clipboard.destroy();
   });
 </script>
 

@@ -100,7 +100,7 @@
   {/if}
 </Modal>
 
-<Modal title="Payment" size="lg" bind:this={proofModal} let:data let:modalElement>
+<Modal title="Proof of Payment" size="lg" bind:this={proofModal} let:data let:modalElement>
   {#if data !== undefined}
     <PaymentProof payment={data} {modalElement} />
   {/if}
