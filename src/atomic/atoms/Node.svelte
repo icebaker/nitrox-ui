@@ -9,13 +9,35 @@
   export let node;
   export let short = undefined;
 
-  if (node === undefined || node === null) {
-    node = { alias: '', public_key: '', color: '' };
+  let alias;
+  $: {
+    if (node) {
+      alias = node.alias;
+
+      if (short !== undefined) {
+        const chunk = Math.floor((short - 3) / 2);
+
+        if (alias && alias.length > short) {
+          alias = `${alias.slice(0, chunk)}...${alias.slice(alias.length - chunk, alias.length)}`;
+        }
+      }
+
+      if (alias == undefined) {
+        let chunk;
+        if (short != undefined) {
+          chunk = Math.floor((short - 3) / 2);
+        } else {
+          chunk = Math.floor((20 - 3) / 2);
+        }
+        alias = `${node.public_key.slice(0, chunk)}...${node.public_key.slice(
+          node.public_key.length - chunk,
+          node.public_key.length
+        )}`;
+      }
+    }
   }
 
   const cssClass = small ? 'node small' : 'node';
-
-  let alias = node.alias;
 
   onMount(() => {
     if (aliasElement && short !== undefined && node.alias && node.alias.length > short) {
@@ -27,27 +49,6 @@
       new ClipboardJS(circleElement);
     }
   });
-
-  if (short !== undefined) {
-    const chunk = Math.floor((short - 3) / 2);
-
-    if (alias && alias.length > short) {
-      alias = `${alias.slice(0, chunk)}...${alias.slice(alias.length - chunk, alias.length)}`;
-    }
-  }
-
-  if (alias == undefined) {
-    let chunk;
-    if (short != undefined) {
-      chunk = Math.floor((short - 3) / 2);
-    } else {
-      chunk = Math.floor((20 - 3) / 2);
-    }
-    alias = `${node.public_key.slice(0, chunk)}...${node.public_key.slice(
-      node.public_key.length - chunk,
-      node.public_key.length
-    )}`;
-  }
 </script>
 
 <span class={cssClass}>

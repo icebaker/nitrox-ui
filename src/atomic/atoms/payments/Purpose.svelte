@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   export let purpose;
+  export let label = false;
 
   let iconElement;
 
@@ -10,25 +11,27 @@
   });
 
   let cssClass = undefined;
-  let label = undefined;
+  let labelText = undefined;
 
-  switch (purpose) {
-    case 'self-payment':
-      label = 'self-payment';
-      cssClass = 'bi-arrow-left-right text-danger-emphasis';
-      break;
-    case 'rebalance':
-      label = 'rebalance';
-      cssClass = 'bi-arrow-clockwise text-success-emphasis';
-      break;
-    case 'payment':
-      label = 'payment';
-      cssClass = 'bi-wallet2 text-warning-emphasis';
-      break;
-    case 'peer-to-peer':
-      label = 'peer to peer';
-      cssClass = 'bi-water text-primary-emphasis';
-      break;
+  $: {
+    switch (purpose) {
+      case 'self-payment':
+        labelText = ' Self-Payment';
+        cssClass = 'bi-arrow-left-right text-danger-emphasis';
+        break;
+      case 'rebalance':
+        labelText = 'Rebalance';
+        cssClass = 'bi-arrow-clockwise text-success-emphasis';
+        break;
+      case 'payment':
+        labelText = 'Payment';
+        cssClass = 'bi-wallet2 text-warning-emphasis';
+        break;
+      case 'peer-to-peer':
+        labelText = ' Peer-to-Peer';
+        cssClass = 'bi-water text-primary-emphasis';
+        break;
+    }
   }
 </script>
 
@@ -40,7 +43,8 @@
       bind:this={iconElement}
       class={`bi ${cssClass}`}
       data-bs-toggle="tooltip"
-      data-bs-title={label}
+      data-bs-title={labelText}
     />
+    {#if label}<span>&nbsp;{labelText}</span>{/if}
   {/if}
 </span>

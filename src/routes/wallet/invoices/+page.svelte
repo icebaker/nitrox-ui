@@ -5,11 +5,17 @@
 
   let invoiceModal = undefined;
 
+  let invoicesComponent = undefined;
+
   const createInvoice = () => {
     if (invoiceModal === undefined) return;
 
     invoiceModal.open(Date.now());
   };
+
+  const reload = () => {
+    if(invoicesComponent) invoicesComponent.reload();
+  }
 </script>
 
 <div class="container">
@@ -17,14 +23,14 @@
 
   <div class="actions">
     <button on:click={createInvoice} type="button" class="btn btn-primary">Create Invoice</button>
-
-    <Modal title="New Invoice" size="lg" bind:this={invoiceModal} let:data>
-      <CreateInvoice at={data} />
-    </Modal>
   </div>
 
-  <Invoices />
+  <Invoices bind:this={invoicesComponent} />
 </div>
+
+<Modal title="New Invoice" size="lg" bind:this={invoiceModal} let:data let:modalElement>
+  <CreateInvoice at={data} {modalElement} callback={reload} />
+</Modal>
 
 <style>
   h1 {

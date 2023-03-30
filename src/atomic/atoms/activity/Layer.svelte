@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   export let layer;
+  export let label = false;
 
   let iconElement;
 
@@ -10,17 +11,19 @@
   });
 
   let cssClass = undefined;
-  let label = undefined;
+  let labelText = undefined;
 
-  switch (layer) {
-    case 'bitcoin':
-      label = 'bitcoin';
-      cssClass = 'bi-currency-bitcoin text-warning';
-      break;
-    case 'lightning':
-      label = 'lightning';
-      cssClass = 'bi-lightning text-primary';
-      break;
+  $: {
+    switch (layer) {
+      case 'bitcoin':
+        labelText = 'Bitcoin';
+        cssClass = 'bi-currency-bitcoin text-warning';
+        break;
+      case 'lightning':
+        labelText = 'Lightning';
+        cssClass = 'bi-lightning text-primary';
+        break;
+    }
   }
 </script>
 
@@ -32,7 +35,8 @@
       bind:this={iconElement}
       class={`bi ${cssClass}`}
       data-bs-toggle="tooltip"
-      data-bs-title={label}
+      data-bs-title={labelText}
     />
+    {#if label}<span>&nbsp;{labelText}</span>{/if}
   {/if}
 </span>

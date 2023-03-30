@@ -3,13 +3,18 @@
 
   import { nanoid } from 'nanoid';
 
-  import Loading from '../../../atoms/states/Loading.svelte';
   import Success from '../../../atoms/states/Success.svelte';
+  import FlowError from '../../../atoms/states/flow/Error.svelte';
+  import FlowPending from '../../../atoms/states/flow/Pending.svelte';
+  import FlowLoading from '../../../atoms/states/flow/Loading.svelte';
+  import Invoice from '../../../molecules/wallet/invoices/Invoice.svelte';
 
   import Nitrox from '../../../../components/nitrox';
 
   export let at;
   export let openAmount = false;
+  export let modalElement = undefined;
+  export let callback = undefined;
 
   let state = undefined;
 
@@ -24,10 +29,13 @@
 
   let idempotencyKey = undefined;
 
+  let flowState = undefined;
+
   const prepare = () => {
     newInvoice = JSON.parse(JSON.stringify(invoiceTemplate));
     idempotencyKey = nanoid(20);
     state = 'prepare';
+    flowState = undefined;
   };
 
   $: {
@@ -40,7 +48,7 @@
     if (baseUrl === undefined) {
       baseUrl = `${await Nitrox.service('receive')}`;
     }
-    state = 'creating';
+    state = 'loading';
 
     if (openAmount) {
       newInvoice.amount.millisatoshis = null;
@@ -59,14 +67,44 @@
     const body = { invoice: newInvoice };
 
     const response = await fetch(`${baseUrl}/invoices`, {
-      method: 'POST',
+      method: 'PUT',
       headers: headers,
       body: JSON.stringify(body)
     });
 
-    const result = await response.json();
+    if(![200, 201].includes(response.status)) {
+      state = 'pending';
+    } else {
+      const result = await response.json();
 
-    state = 'created';
+      const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
+
+      const startedAt = performance.now();
+      const seconds = 5;
+
+      while (state === 'loading' && performance.now() - startedAt < seconds * 1000) {
+        const response = await fetch(`${baseUrl}/invoices/state`, {
+          method: 'GET',
+          headers: headers
+        });
+
+        if(![200, 201].includes(response.status)) {
+          state = 'pending';
+        } else {
+          flowState = await response.json();
+
+          if (flowState.state === 'pending') {
+            await sleep(0.25);
+          } else {
+            state = flowState.state;
+          }
+        }
+      }
+
+      if (state === 'loading') state = 'pending';
+    }
+
+    callback();
   };
 
   let previousValue = null;
@@ -81,13 +119,31 @@
   };
 </script>
 
-{#if state === 'creating'}
+{#if state === 'loading'}
   <div class="state">
-    <Loading />
+    <FlowLoading fleeting={flowState} message="Creating invoice..." />
   </div>
-{:else if state === 'created'}
+{:else if state === 'pending'}
   <div class="state">
-    <Success message="Invoice Created Successfully!" />
+    <FlowPending
+      fleeting={flowState}
+      message="Creation is still in progress..."
+      instruction="Please check your Receive list in a few moments."
+    />
+  </div>
+{:else if state === 'success'}
+  <div class="state success border-bottom">
+    <Success message="Invoice successfully created!" />
+  </div>
+
+  <Invoice invoice={flowState.success.result} {modalElement} />
+{:else if state === 'error'}
+  <div class="state">
+    <FlowError
+      fleeting={flowState}
+      message="Sorry, your payment failed."
+      instruction="Check your Send list for more information about the error."
+    />
   </div>
 {:else if state === 'prepare'}
   <form on:submit|preventDefault={createInvoice}>
@@ -206,5 +262,9 @@
 
   .open-amount {
     padding-top: 0.2em;
+  }
+
+  .state.success {
+    margin-bottom: 1em;
   }
 </style>

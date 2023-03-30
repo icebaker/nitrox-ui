@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   export let how;
+  export let label = false;
 
   let iconElement;
 
@@ -10,29 +11,31 @@
   });
 
   let cssClass = undefined;
-  let label = undefined;
+  let labelText = undefined;
 
-  switch (how) {
-    case 'spontaneously':
-      label = 'spontaneously';
-      cssClass = 'bi-stars text-warning-emphasis';
-      break;
-    case 'with-invoice':
-      label = 'with-invoice';
-      cssClass = 'bi-receipt text-success-emphasis';
-      break;
-    case 'forwarding':
-      label = 'forwarding';
-      cssClass = 'bi-forward text-info-emphasis';
-      break;
-    case 'opening-channel':
-      label = 'opening-channel';
-      cssClass = 'bi-node-plus-fill text-success';
-      break;
-    case 'closing-channel':
-      label = 'closing-channel';
-      cssClass = 'bi-node-minus-fill text-danger';
-      break;
+  $: {
+    switch (how) {
+      case 'spontaneously':
+        labelText = 'Spontaneously';
+        cssClass = 'bi-stars text-warning-emphasis';
+        break;
+      case 'with-invoice':
+        labelText = 'With Invoice';
+        cssClass = 'bi-receipt text-success-emphasis';
+        break;
+      case 'forwarding':
+        labelText = 'Forwarding';
+        cssClass = 'bi-forward text-info-emphasis';
+        break;
+      case 'opening-channel':
+        labelText = 'Opening Channel';
+        cssClass = 'bi-node-plus-fill text-success';
+        break;
+      case 'closing-channel':
+        labelText = 'Closing Channel';
+        cssClass = 'bi-node-minus-fill text-danger';
+        break;
+    }
   }
 </script>
 
@@ -44,7 +47,8 @@
       bind:this={iconElement}
       class={`bi ${cssClass}`}
       data-bs-toggle="tooltip"
-      data-bs-title={label}
+      data-bs-title={labelText}
     />
+    {#if label}<span>&nbsp;{labelText}</span>{/if}
   {/if}
 </span>
