@@ -11,10 +11,10 @@
 </script>
 
 <div class="row">
-  <div class="col-4">
+  <div class="col-6 qr-code">
     <QRCode code={invoice.code} />
   </div>
-  <div class="col-8">
+  <div class="col-6">
     <div class="details border-top">
       <PublicInformation {invoice} />
     </div>
@@ -33,7 +33,11 @@
 
 <style>
   .details {
-    margin-top: 1em;
+    margin-top: 5em;
+  }
+
+  .qr-code {
+    min-height: 370px;
   }
 
   .code {

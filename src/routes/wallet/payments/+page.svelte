@@ -11,6 +11,12 @@
 
     payInvoiceModal.open(Date.now());
   };
+
+  let paymentsComponent = undefined;
+
+  const reload = () => {
+    if(paymentsComponent) paymentsComponent.reload();
+  }
 </script>
 
 <div class="container">
@@ -18,14 +24,14 @@
 
   <div class="actions">
     <button on:click={payInvoice} type="button" class="btn btn-primary">Pay Invoice</button>
-
-    <Modal title="Pay Invoice" size="lg" bind:this={payInvoiceModal} let:data>
-      <PayInvoice at={data} />
-    </Modal>
   </div>
 
-  <Payments />
+  <Payments bind:this={paymentsComponent}  />
 </div>
+
+<Modal title="Pay Invoice" size="lg" bind:this={payInvoiceModal} let:data let:modalElement>
+  <PayInvoice at={data} modalElement={modalElement} callback={reload} />
+</Modal>
 
 <style>
   h1 {

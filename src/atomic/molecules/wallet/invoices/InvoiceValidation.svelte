@@ -15,6 +15,15 @@
 </script>
 
 <div class="details">
+  <div class="code">
+    <Copyable
+      label="Code"
+      cssClass="text-info-emphasis"
+      content={invoice.code}
+      {modalElement}
+      caption="invoice code"
+    />
+  </div>
   <table class="table text-center table-hover">
     <tbody>
       <tr>
@@ -61,20 +70,10 @@
       <slot />
     </tbody>
   </table>
-
-  <div class="code">
-    <Copyable
-      label="Code"
-      cssClass="text-info-emphasis"
-      content={invoice.code}
-      {modalElement}
-      caption="invoice code"
-    />
-  </div>
 </div>
 
 <style>
   .code {
-    margin-top: 1.6em;
+    margin: .6em 0 1.2em 0;
   }
 </style>

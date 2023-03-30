@@ -31,9 +31,16 @@
   const openProof = (payment) => {
     if (proofModal) proofModal.open(payment);
   };
+
+  let filterableData = undefined;
+
+  export const reload = () => {
+    if(filterableData) filterableData.reload();
+  }
 </script>
 
 <FilterableData
+  bind:this={filterableData}
   service="nitrox-send"
   path="/payments"
   filterable={true}

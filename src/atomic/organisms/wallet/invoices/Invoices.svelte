@@ -32,6 +32,12 @@
   let fleetingModal = undefined;
   let modalTitle = null;
 
+  let filterableData = undefined;
+
+  export const reload = () => {
+    if(filterableData) filterableData.reload();
+  }
+
   const openFleeting = (fleeting, kind) => {
     modalTitle = kind === 'error' ? 'Error Details' : 'Pending Details';
     if (fleetingModal) fleetingModal.open(fleeting);
@@ -39,6 +45,7 @@
 </script>
 
 <FilterableData
+  bind:this={filterableData}
   service="nitrox-receive"
   path="/invoices"
   filterable={true}
@@ -87,7 +94,7 @@
               {#if invoice.received}
                 {#if invoice.payable !== 'once' && invoice.payments && invoice.payments.length > 0}
                   <MilliSatsAtom milli={invoice.received.millisatoshis} />
-                  ({invoice.payments.length})
+                  ÷ <span class="text-warning-emphasis">{invoice.payments.length}</span>
                 {:else}
                   <MilliSatsAtom milli={invoice.received.millisatoshis} />
                 {/if}

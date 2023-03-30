@@ -4,17 +4,23 @@
   import { onMount } from 'svelte';
   import { nanoid } from 'nanoid';
 
+  import CopyableAtom from '../../../atoms/Copyable.svelte';
   import Success from '../../../atoms/states/Success.svelte';
   import FlowError from '../../../atoms/states/flow/Error.svelte';
   import FlowPending from '../../../atoms/states/flow/Pending.svelte';
   import FlowLoading from '../../../atoms/states/flow/Loading.svelte';
   import NumberAtom from '../../../atoms/Number.svelte';
 
-  import Invoice from './Public.svelte';
+  import PaymentProof from '../payments/PaymentProof.svelte';
+
+  import HorizontalInvoice from './HorizontalInvoice.svelte';
 
   import Nitrox from '../../../../components/nitrox';
 
   export let at;
+  export let modalElement = undefined;
+
+  export let callback = undefined;
 
   let state = undefined;
 
@@ -74,18 +80,22 @@
       headers: headers
     });
 
-    decodedInvoice = await response.json();
-
-    if (decodedInvoice.amount && decodedInvoice.amount.millisatoshis !== 0) {
-      newPayment.amount.millisatoshis = decodedInvoice.amount.millisatoshis;
+    if(![200, 201].includes(response.status)) {
+        state = 'decodeError';
     } else {
-      newPayment.amount.millisatoshis = null;
-      decodedInvoice.amount = null;
+      decodedInvoice = await response.json();
+
+      if (decodedInvoice.amount && decodedInvoice.amount.millisatoshis !== 0) {
+        newPayment.amount.millisatoshis = decodedInvoice.amount.millisatoshis;
+      } else {
+        newPayment.amount.millisatoshis = null;
+        decodedInvoice.amount = null;
+      }
+
+      idempotencyKey = nanoid(20);
+
+      state = 'decoded';
     }
-
-    idempotencyKey = nanoid(20);
-
-    state = 'decoded';
   };
 
   const payInvoice = async () => {
@@ -120,36 +130,46 @@
       body: JSON.stringify(body)
     });
 
-    const result = await response.json();
+    if(![200, 201].includes(response.status)) {
+      state = 'pending';
+    } else {
+      const result = await response.json();
 
-    const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
+      const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
-    const startedAt = performance.now();
-    const seconds = 5;
+      const startedAt = performance.now();
+      const seconds = 5;
 
-    while (state === 'loading' && performance.now() - startedAt < seconds * 1000) {
-      const response = await fetch(`${baseUrl}/invoices/pay/state`, {
-        method: 'GET',
-        headers: headers
-      });
+      while (state === 'loading' && performance.now() - startedAt < seconds * 1000) {
+        const response = await fetch(`${baseUrl}/invoices/pay/state`, {
+          method: 'GET',
+          headers: headers
+        });
 
-      flowState = await response.json();
+        if(![200, 201].includes(response.status)) {
+          state = 'pending';
+        } else {
+          flowState = await response.json();
 
-      if (flowState.state === 'pending') {
-        await sleep(0.25);
-      } else {
-        state = flowState.state;
+          if (flowState.state === 'pending') {
+            await sleep(0.25);
+          } else {
+            state = flowState.state;
+          }
+        }
       }
+
+      if (state === 'loading') state = 'pending';
     }
 
-    if (state === 'loading') state = 'pending';
+    if(callback) callback();
   };
 
   let previousCode = newPayment.code;
 
   const onCodeKeyUp = () => {
     if (previousCode !== newPayment.code) {
-      if (newPayment.code.replace('lightning:', '').length > 200) {
+      if (newPayment.code && newPayment.code.replace('lightning:', '').length > 200) {
         decodeInvoice();
       } else {
         state = 'prepare';
@@ -169,7 +189,7 @@
       return 0;
     }
 
-    return (parseFloat(parseInt(fee, 10)) / parseFloat(parseInt(amount, 10))) * 1000.0;
+    return (parseFloat(parseInt(fee, 10)) / parseFloat(parseInt(amount, 10))) * 1000000.0;
   };
 
   const onMaximumFeeUpdate = () => {
@@ -192,6 +212,22 @@
 {:else if state === 'success'}
   <div class="state">
     <Success message="Invoice successfully paid!" />
+
+    <PaymentProof payment={flowState.success.result} {modalElement} />
+  </div>
+{:else if state === 'decodeError'}
+  <div class="state">
+    <FlowError message="Unable to decode invoice. Please ensure it's valid." />
+
+    {#if newPayment.code}
+      <div class="copyable">
+        <CopyableAtom cssClass="text-danger" content={newPayment.code} {modalElement} />
+      </div>
+    {/if}
+
+    <div class="text-center border-top actions">
+      <button on:click={prepare} type="submit" class="btn btn-primary">Try Again</button>
+    </div>
   </div>
 {:else if state === 'error'}
   <div class="state">
@@ -203,34 +239,28 @@
   </div>
 {:else if state === 'prepare' || state === 'decoded'}
   <form on:submit|preventDefault={submitForm}>
-    <div class="row">
-      <div class="col">
-        <div class="mb-3">
-          <label for="code" class="form-label">Code</label>
-          <input
-            tabindex="1"
-            on:keyup={onCodeKeyUp}
-            bind:value={newPayment.code}
-            placeholder="lnbc20m1pv..."
-            type="text"
-            class="form-control"
-            id="code"
-            aria-describedby="codeHelp"
-          />
-          <div id="codeHelp" class="form-text">
-            The Invoice Code, which is a unique identifier similar to <code
-              >lnbc20m1pv...qqdhhwkj<code />.
-            </code>
-          </div>
+    {#if state === 'prepare'}
+      <div class="mb-3">
+        <label for="code" class="form-label">Code</label>
+        <input
+          tabindex="1"
+          on:keyup={onCodeKeyUp}
+          bind:value={newPayment.code}
+          placeholder="lnbc20m1pv..."
+          type="text"
+          class="form-control"
+          id="code"
+          aria-describedby="codeHelp"
+        />
+        <div id="codeHelp" class="form-text">
+          The Invoice Code, which is a unique identifier similar to <code
+            >lnbc20m1pv...qqdhhwkj<code />.
+          </code>
         </div>
       </div>
-      {#if state === 'decoded'}
-        <div class="col">
-          <Invoice invoice={decodedInvoice} />
-        </div>
-      {/if}
-    </div>
-    {#if state === 'decoded'}
+    {:else if state === 'decoded'}
+      <HorizontalInvoice invoice={decodedInvoice} modalElement={modalElement} />
+
       <div class="row">
         <div class="col">
           <div class="mb-3">
@@ -322,5 +352,9 @@
 
   .actions {
     padding-top: 1em;
+  }
+
+  .copyable {
+    margin-bottom: 1em;
   }
 </style>

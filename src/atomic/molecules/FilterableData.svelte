@@ -105,6 +105,7 @@
       }
 
       state = 'ready';
+
       if (!destroyed) {
         setTimeout(() => {
           if (autoReloadElement && toolTipePending) {
@@ -148,7 +149,7 @@
     }
   };
 
-  const reload = () => {
+  export const reload = () => {
     loadData('post');
   };
 

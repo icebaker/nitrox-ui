@@ -12,11 +12,15 @@
     {message}
   </p>
 
-  <Table {fleeting} at={false} />
+  {#if fleeting}
+    <Table {fleeting} at={false} />
+  {/if}
 
-  <p class="instruction">
-    {instruction}
-  </p>
+  {#if instruction}
+    <p class="instruction">
+      {instruction}
+    </p>
+  {/if}
 </div>
 
 <style>

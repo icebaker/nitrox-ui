@@ -12,7 +12,9 @@
     {message}
   </p>
 
-  <Table {fleeting} at={false} />
+  {#if fleeting}
+    <Table {fleeting} at={false} />
+  {/if}
 
   <p class="instruction">
     {instruction}
